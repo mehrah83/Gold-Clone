@@ -4,7 +4,6 @@ import MillionSection from "./components/MillionSection";
 import MovementSection from "./components/MovementSection";
 import SupportSection from "./components/SupportSection";
 import VideoSection from "./components/VideoSection";
-import ScrollToFranchise from "./components/scrollToFranchise";
 
 const Franchise = () => {
 
@@ -21,7 +20,6 @@ const Franchise = () => {
       <MillionSection/>
       <SupportSection/>
       <VideoSection/>
-      <ScrollToFranchise/>
     </>
   )
 }
