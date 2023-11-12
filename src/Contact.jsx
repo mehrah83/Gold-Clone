@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import BannerSection from "./components/BannerSection";
 import ContactSection from "./components/ContactSection";
 
@@ -8,6 +9,14 @@ const Contact = () => {
     backgroundImage: "https://goldsgym.in/assets/images/contact.jpg",
     backgroundSize: "cover",
   }
+
+  useEffect(() => {
+    document.title = "goldsgym.in/contact";
+
+    return () => {
+      document.title = "Gold's Gym India - Fitness Centre";
+    }
+  }, [])
   return (
     <>
      <BannerSection {...data}/>

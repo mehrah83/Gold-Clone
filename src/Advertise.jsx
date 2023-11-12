@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import BannerSection from "./components/BannerSection"
 import InstituteSection from "./components/InstituteSection";
 import SubsribeSection from "./components/SubsribeSection";
@@ -12,6 +13,14 @@ const Advertise = () => {
     backgroundBlendMode: "multiply",
     backgroundColor: "rgba(0, 0, 0, 0.34)",
   }
+
+  useEffect(() => {
+    document.title = "Advertisement | Advertises with Gold's Gym";
+
+    return () => {
+      document.title = "Gold's Gym India - Fitness Centre";
+    }
+  }, [])
   return (
     <>
      <BannerSection {...data}/> 

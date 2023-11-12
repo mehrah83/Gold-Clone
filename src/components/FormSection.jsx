@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { Button } from "../styles/Button";
 import { useState } from "react";
 import { ItemOne, ItemTwo } from "../Items/FormItems";
+import { useEffect } from "react";
+import Swal from "sweetalert2";
 
 const Wrapper = styled.section`
   .common-heading {
@@ -28,13 +30,14 @@ const Wrapper = styled.section`
     display: block;
   }
 
-  @media (max-width: ${({theme}) => theme.media.mobile}) {
-    select,input{
+  @media (max-width: ${({ theme }) => theme.media.mobile}) {
+    select,
+    input {
       width: 100%;
     }
   }
   @media (max-width: 400px) {
-    .btn{
+    .btn {
       width: 100%;
     }
   }
@@ -50,6 +53,7 @@ const FormSection = () => {
   };
 
   const [inputData, setInputData] = useState(data);
+  const [flag, setFlag] = useState(false);
 
   const handleOnChange = (e) => {
     setInputData({
@@ -60,12 +64,43 @@ const FormSection = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const storedData = JSON.parse(localStorage.getItem("formData")) || [];
-    const updatedData = [...storedData, inputData];
-    localStorage.setItem("formData", JSON.stringify(updatedData));
-    setInputData(data);
-    alert("Data Submitted Successfully");
+    if (
+      !inputData.selectOptionOne ||
+      !inputData.selectOptionState ||
+      !inputData.name ||
+      !inputData.email ||
+      !inputData.phone
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All fields are mandartory",
+      });
+      // return;
+    } else if (inputData.phone.length !== 10) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Phone number should be of 10 digit",
+      });
+    } else {
+      const storedData = JSON.parse(localStorage.getItem("formData")) || [];
+      const updatedData = [...storedData, inputData];
+      localStorage.setItem("formData", JSON.stringify(updatedData));
+      setInputData(data);
+      Swal.fire({
+        title: "Good job!",
+        text: `${inputData.name} your form is submitted`,
+        icon: "success"
+      });
+      setFlag(true);
+    }
   };
+
+  useEffect(() => {
+    console.log("Data Submitted Successfully");
+  }, [flag]);
+
   return (
     <>
       <Wrapper className="section">

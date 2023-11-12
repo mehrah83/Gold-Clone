@@ -2,6 +2,10 @@ import styled from "styled-components";
 import { Button } from "../styles/Button";
 import { useState } from "react";
 import { ItemThree } from "../Items/FormItems";
+import Swal from "sweetalert2";
+import { useEffect } from "react";
+
+
 
 const Wrapper = styled.section`
   .flex {
@@ -69,6 +73,7 @@ const ContactSection = () => {
 
   const [items, setItems] = useState(ItemThree);
   const [inputData, setInputData] = useState(data);
+  const [flag, setFlag] = useState(false);
 
   const handleOnChange = (e) => {
     setInputData({
@@ -79,19 +84,50 @@ const ContactSection = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const storedData = JSON.parse(localStorage.getItem("contactData")) || [];
-    const updatedData = [...storedData, inputData];
-    localStorage.setItem("contactData", JSON.stringify(updatedData));
-    setInputData(data);
-    alert("Form Submitted Successfully");
-  }
+    if (
+      !inputData.selectOption ||
+      !inputData.name ||
+      !inputData.email ||
+      !inputData.contact ||
+      !inputData.subject ||
+      !inputData.location
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "All fields are mandartory",
+      });
+    } else if (inputData.contact.length !== 10) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Phone number should be of 10 digit",
+      });
+    } else {
+      const storedData = JSON.parse(localStorage.getItem("contactData")) || [];
+      const updatedData = [...storedData, inputData];
+      localStorage.setItem("contactData", JSON.stringify(updatedData));
+      setInputData(data);
+      Swal.fire({
+        title: "Good job!",
+        text: `${inputData.name} your form is submitted`,
+        icon: "success"
+      });
+      setFlag(true);
+    }
+  };
+
+  useEffect(() => {
+    console.log("Data Submitted Successfully");
+  }, [flag])
+  
   return (
     <>
       <Wrapper className="section">
         <div className="container flex">
           <form onSubmit={handleOnSubmit}>
             <div>
-              <select name="contact_us" id="contact_us" required="" onChange={handleOnChange} value={inputData.selectOption}>
+              <select name="selectOption" id="selectOption" onChange={handleOnChange} value={inputData.selectOption}>
                 {items.map((currElem) => {
                   return (
                     <>
@@ -110,7 +146,7 @@ const ContactSection = () => {
                 id="name"
                 placeholder="Enter Name"
                 onChange={handleOnChange}
-                value={indexedDB.name}
+                value={inputData.name}
               />
             </div>
             <div>
@@ -153,7 +189,7 @@ const ContactSection = () => {
                 value={inputData.location}
               />
             </div>
-            <Button className="btn" type="submit">
+            <Button className="btn">
               SUBMIT
             </Button>
           </form>

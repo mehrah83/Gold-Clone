@@ -39,6 +39,12 @@ const Wrapper = styled.section`
     gap: 2rem;
   }
 }
+
+@media (max-width: 500px) {
+  .flex{
+    flex-direction: column;
+  }
+}
 `;
 const IconSection = () => {
   return (
